@@ -7,6 +7,30 @@ Describe the problem and fix in 2–5 bullets:
 - What changed:
 - What did NOT change (scope boundary):
 
+## Current vs Target (required for architecture or Sprint 0 work)
+
+- Current factual repo state:
+- Target canonical architecture/state:
+- What remains intentionally unmigrated:
+
+## Ownership / Authority (required)
+
+- Primary owner enforced by this PR:
+- Paths that must remain non-sovereign:
+- Any authority moved, clarified, or frozen:
+
+## Frozen / Legacy Paths
+
+- Frozen paths touched:
+- Why touching them was still allowed:
+- Confirm no new sovereign logic was added: (`Yes/No`)
+
+## Contracts
+
+- Contracts created or changed:
+- Are these canonical docs only, implemented code, or both?
+- Any contract intentionally deferred because the repo lacks factual support:
+
 ## Change Type (select all)
 
 - [ ] Bug fix
@@ -126,6 +150,13 @@ If a bot review conversation is addressed by this PR, resolve that conversation 
 - Config/env changes? (`Yes/No`)
 - Migration needed? (`Yes/No`)
 - If yes, exact upgrade steps:
+
+## Sprint Status
+
+- Sprint:
+- Status: (`OPEN` / `PARTIALLY CLOSED` / `CLOSED`)
+- Exact closure criteria satisfied:
+- Remaining blockers or debt:
 
 ## Failure Recovery (if this breaks)
 
