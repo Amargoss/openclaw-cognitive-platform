@@ -133,6 +133,7 @@ La plataforma debe llegar a ser capaz de:
 ## Frontera arquitectónica objetivo
 
 ### Substrate operativo objetivo
+
 Aquí debe quedar la parte operacional apoyada en OpenClaw:
 
 - canales,
@@ -145,6 +146,7 @@ Aquí debe quedar la parte operacional apoyada en OpenClaw:
 - interacción conversacional base.
 
 ### Control plane objetivo
+
 Aquí debe vivir la lógica soberana del nuevo sistema:
 
 - clasificación,
@@ -159,6 +161,7 @@ Aquí debe vivir la lógica soberana del nuevo sistema:
 - observabilidad.
 
 ### Adapters objetivo
+
 Los adapters sólo pueden:
 
 - traducir entrada,
@@ -300,6 +303,7 @@ No diseñes como si fuera:
 ## Protocolo obligatorio de trabajo
 
 ### FASE A — AUDITORÍA REAL
+
 Debes comenzar siempre por el repositorio real.
 
 Debes identificar:
@@ -314,6 +318,7 @@ Debes identificar:
 - contradicciones entre arquitectura objetivo y código actual.
 
 ### FASE B — UBICACIÓN ARQUITECTÓNICA
+
 Antes de cambiar algo debes declarar:
 
 - módulo dueño,
@@ -326,6 +331,7 @@ Antes de cambiar algo debes declarar:
 - impacto en persistencia.
 
 ### FASE C — PLAN EXACTO
+
 Debes listar:
 
 - objetivo exacto del sprint,
@@ -341,6 +347,7 @@ Debes listar:
 - criterio de rollback.
 
 ### FASE D — IMPLEMENTACIÓN
+
 Debes:
 
 - escribir cambios completos,
@@ -350,6 +357,7 @@ Debes:
 - mantener consistencia entre docs, contratos y código.
 
 ### FASE E — VALIDACIÓN
+
 Debes incluir:
 
 - tests unitarios,
@@ -361,6 +369,7 @@ Debes incluir:
 - validación de servicios o puertos si aplica.
 
 ### FASE F — CIERRE
+
 Debes declarar explícitamente:
 
 - qué quedó resuelto,
@@ -436,7 +445,9 @@ Si aún no existen, Sprint 0 debe:
 ## Catálogo canónico de sprints
 
 ### Sprint 0 — Freeze arquitectónico
+
 Objetivo:
+
 - auditoría real del repo,
 - ownership,
 - authority,
@@ -448,7 +459,9 @@ Objetivo:
 - base documental mínima para arrancar Sprint 1.
 
 ### Sprint 1 — Bootstrap operativo
+
 Objetivo:
+
 - estructura mínima inicial,
 - configuración compartida,
 - servicios base,
@@ -457,7 +470,9 @@ Objetivo:
 - persistencia inicial.
 
 ### Sprint 2 — Mission Kernel
+
 Objetivo:
+
 - clasificación de misión,
 - normalización,
 - entidades,
@@ -466,7 +481,9 @@ Objetivo:
 - mission_id.
 
 ### Sprint 3 — Planner Engine
+
 Objetivo:
+
 - plan formal,
 - heurística base,
 - pasos,
@@ -474,7 +491,9 @@ Objetivo:
 - fallback inicial.
 
 ### Sprint 4 — Runtime Registry
+
 Objetivo:
+
 - nodos,
 - heartbeats,
 - health,
@@ -482,14 +501,18 @@ Objetivo:
 - reconciliación inicial.
 
 ### Sprint 5 — Orchestrator
+
 Objetivo:
+
 - ejecución de planes,
 - dispatch,
 - retries,
 - outcomes.
 
 ### Sprint 6 — Memory Service
+
 Objetivo:
+
 - short-term,
 - long-term,
 - operational memory,
@@ -497,7 +520,9 @@ Objetivo:
 - filtro de ruido.
 
 ### Sprint 7 — Document Pipeline
+
 Objetivo:
+
 - ingestión,
 - extracción,
 - resumen,
@@ -505,7 +530,9 @@ Objetivo:
 - persistencia documental.
 
 ### Sprint 8 — Governance + Capability Registry
+
 Objetivo:
+
 - autorización,
 - versionado,
 - staging/production,
@@ -513,7 +540,9 @@ Objetivo:
 - auditoría.
 
 ### Sprint 9 — Experiment Lab + Reward/Fitness
+
 Objetivo:
+
 - hipótesis,
 - baseline,
 - candidate,
@@ -522,21 +551,27 @@ Objetivo:
 - evidencia.
 
 ### Sprint 10 — OpenClaw Integration Layer
+
 Objetivo:
+
 - tools de alto nivel,
 - skills subordinadas,
 - hooks sin autoridad indebida,
 - alineación con sesiones y memoria operativa.
 
 ### Sprint 11 — Distributed Runtime
+
 Objetivo:
+
 - multinodo,
 - reconciliación avanzada,
 - snapshots,
 - degradación elegante.
 
 ### Sprint 12 — Administration + Observability
+
 Objetivo:
+
 - panel/API administrativa,
 - estado general,
 - historial,
@@ -544,7 +579,9 @@ Objetivo:
 - modo diagnóstico.
 
 ### Sprint 13 — Recovery y backups
+
 Objetivo:
+
 - snapshots,
 - restore,
 - backup,
@@ -552,7 +589,9 @@ Objetivo:
 - consistency checks.
 
 ### Sprint 14 — Hardening final
+
 Objetivo:
+
 - soak tests,
 - smoke suite,
 - runbooks,
@@ -578,12 +617,15 @@ Debes separarlas explícitamente.
 ### SPRINT ACTIVO: Sprint 0
 
 #### Objetivo específico
+
 Congelar arquitectura, authority, ownership, contratos base, límites entre OpenClaw substrate / control plane / adapters, rutas permitidas/prohibidas, puertos, persistencia y reglas de dependencia para eliminar ambigüedad y dejar el repositorio listo para Sprint 1.
 
 #### Modo
+
 **AUDITORÍA + PLANIFICACIÓN + PR**
 
 #### Alcance permitido
+
 - auditoría real del repositorio,
 - mapa de ownership por carpetas y módulos,
 - definición explícita substrate / control plane / adapters,
@@ -600,6 +642,7 @@ Congelar arquitectura, authority, ownership, contratos base, límites entre Open
 - eliminación de basura técnica sólo si es claramente segura y no funcional.
 
 #### Alcance prohibido
+
 - MissionKernel funcional completo,
 - Planner funcional completo,
 - runtime dispatch real,
@@ -615,6 +658,7 @@ Congelar arquitectura, authority, ownership, contratos base, límites entre Open
 - cambios operativos grandes fuera de lo mínimo necesario para fijar arquitectura y contratos.
 
 #### Entregables mínimos
+
 - mapa de ownership claro,
 - freeze conceptual de legacy,
 - contratos base alineados o creados,
@@ -625,6 +669,7 @@ Congelar arquitectura, authority, ownership, contratos base, límites entre Open
 - diff documentado de CREATE / MODIFY / FREEZE / DELETE / KEEP-AS-IS.
 
 #### Validaciones mínimas
+
 - verificación de imports y acoplamientos,
 - verificación de consistencia entre docs y repo real,
 - validación de contradicciones vivas entre roadmap, arquitectura, ownership y contratos,
@@ -633,12 +678,14 @@ Congelar arquitectura, authority, ownership, contratos base, límites entre Open
 - validación básica de rutas/configs si se crean unit files o env files.
 
 #### Riesgo principal
+
 - dejar Sprint 0 bonito en papel pero ambiguo en el código,
 - seguir confundiendo arquitectura futura con estado actual,
 - dejar contratos base incompletos,
 - permitir que adapters o hooks sigan absorbiendo lógica central.
 
 #### Criterio de cierre
+
 Sprint 0 sólo puede darse por cerrado si:
 
 - ownership queda claro,

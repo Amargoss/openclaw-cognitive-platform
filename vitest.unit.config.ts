@@ -39,13 +39,16 @@ export function loadExtraExcludePatternsFromEnv(
 }
 
 export function createUnitVitestConfig(env: Record<string, string | undefined> = process.env) {
+  const baseInclude = Array.isArray(baseTest.include) ? baseTest.include : [];
   return defineConfig({
     ...base,
     test: {
       ...baseTest,
       isolate: resolveVitestIsolation(env),
       runner: "./test/non-isolated-runner.ts",
-      include: loadIncludePatternsFromEnv(env) ?? unitTestIncludePatterns,
+      include:
+        loadIncludePatternsFromEnv(env) ??
+        Array.from(new Set([...baseInclude, ...unitTestIncludePatterns])),
       exclude: [
         ...new Set([
           ...exclude,

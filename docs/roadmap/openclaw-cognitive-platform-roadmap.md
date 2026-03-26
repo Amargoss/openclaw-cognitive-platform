@@ -150,25 +150,38 @@ El control plane objetivo queda compuesto por autoridades separadas:
 ## Sprint 1
 
 - objetivo:
-  - formalizar el esqueleto mínimo del control plane sobre el árbol actual sin abrir funcionalidad avanzada
+  - crear la base física mínima, real y operable del futuro control plane sin abrir funcionalidad avanzada
 - alcance permitido:
-  - crear superficies mínimas y no funcionales para MissionKernel, Planner, GovernanceController, CapabilityRegistry y Observability
-  - establecer puntos de integración explícitos con `src/acp`
+  - crear `services/` y `shared/` top-level para bootstrap
+  - crear configuración compartida mínima
+  - crear logging compartido mínimo
+  - crear health/readiness mínimo real del bootstrap
+  - crear persistencia local-first mínima real
+  - alinear contratos tipados mínimos con Sprint 0
 - alcance prohibido:
-  - planificación compleja real
-  - dispatch distribuido real
-  - promotion real
-  - autoevolución
+  - MissionKernel funcional
+  - Planner funcional
+  - runtime distribuido real
+  - document pipeline real
+  - experiment lab funcional
+  - reward engine funcional
 - entregables:
-  - módulos/cáscaras mínimas con ownership explícito
-  - imports alineados a contracts-first
+  - `shared/config`
+  - `shared/logging`
+  - `shared/contracts`
+  - `shared/db`
+  - `services/_bootstrap`
+  - imports alineados a contracts-first y a la frontera `shared/**` vs `src/shared/**`
 - validaciones:
   - imports coherentes
+  - health/readiness responden
+  - persistencia bootstrap abre/cierra
   - no nueva lógica soberana en gateway/adapters/plugins
 - criterio de cierre:
-  - existe una superficie mínima clara para las autoridades principales
+  - existe una base física mínima clara y operable para iniciar Sprint 2
 - riesgos principales:
-  - crear “falso control plane” sin separar responsabilidades
+  - crear bootstrap bonito pero ambiguo
+  - confundir `src/shared/**` con la nueva superficie canónica `shared/**`
 
 ## Sprint 2
 

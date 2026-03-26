@@ -23,6 +23,27 @@ Las dependencias deben reforzar una sola cadena de autoridad. Si una dependencia
 
 ## Reglas por zona
 
+### `shared/**`
+
+- es la superficie canónica nueva del bootstrap/control plane
+- puede depender de Node stdlib y dependencias npm explícitas del repo
+- no puede depender de `src/shared/**`, `src/gateway/**`, `src/memory/**`, `src/acp/**` ni `extensions/**`
+- excepciones aprobadas para Sprint 1:
+  - `shared/config/**` puede usar `src/utils.ts`
+  - `shared/logging/**` puede usar `src/logging.ts` sólo como backend encapsulado
+
+### `services/**`
+
+- es la superficie canónica nueva de servicios bootstrap/control plane
+- sólo puede depender de `shared/**`, Node stdlib y dependencias npm explícitas del repo
+- no puede depender de `src/shared/**`, `src/gateway/**`, `src/memory/**`, `src/acp/**` ni `extensions/**`
+
+### `src/shared/**`
+
+- permanece como biblioteca legacy del runtime OpenClaw
+- no pasa a ser owner del bootstrap nuevo
+- no debe recibir lógica nueva del control plane en Sprint 1
+
 ### `src/gateway`
 
 - puede depender de transporte, auth, sessions, protocol

@@ -65,6 +65,8 @@ export default defineConfig({
       unitMemoryHotspotManifestPath,
     ],
     include: [
+      "shared/**/*.test.ts",
+      "services/**/*.test.ts",
       "src/**/*.test.ts",
       "extensions/**/*.test.ts",
       "test/**/*.test.ts",

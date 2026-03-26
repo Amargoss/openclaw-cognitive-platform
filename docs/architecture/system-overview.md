@@ -2,7 +2,7 @@
 
 ## Estado actual
 
-El repositorio real está organizado principalmente alrededor de `src/`, con OpenClaw como runtime operativo ya implementado. No existe todavía una topología física separada en `services/`, `shared/` y `adapters/`.
+El repositorio real está organizado principalmente alrededor de `src/`, con OpenClaw como runtime operativo ya implementado. Sprint 1 introduce `services/` y `shared/` top-level como base física mínima del bootstrap del control plane, sin mover masivamente el árbol legacy.
 
 ### Mapa factual del árbol
 
@@ -17,9 +17,12 @@ El repositorio real está organizado principalmente alrededor de `src/`, con Ope
 - `apps/`: adapters móviles y desktop
 - `extensions/`: plugins y conectores
 - `skills/`: skills subordinadas
+- `shared/`: superficie canónica nueva del bootstrap/control plane
+- `services/`: servicios bootstrap/control plane mínimos
 - `src/acp/control-plane`: embrión actual de control plane
 - `src/acp/runtime`: registry/runtime local embrionario
 - `src/memory`: indexado, embeddings y búsqueda de memoria local
+- `src/shared`: utilidades legacy de OpenClaw; no owner del bootstrap nuevo
 
 ### Servicios y puertos observables hoy
 
@@ -83,11 +86,12 @@ El control plane objetivo queda compuesto por autoridades lógicas separadas:
 
 - `src/acp/control-plane` y `src/acp/runtime` son el embrión factual más cercano al control plane.
 - `src/gateway`, `src/memory` y partes de `extensions/` contienen hoy responsabilidades que Sprint 0 debe congelar y reubicar conceptualmente.
-- La migración física de directorios queda fuera de Sprint 0.
+- Sprint 1 crea `shared/` y `services/` top-level sólo para bootstrap mínimo.
+- `src/shared` no pasa a ser owner del bootstrap; la superficie canónica nueva vive en `shared/`.
 
 ## No implementado aún
 
-Fuera de Sprint 0:
+Fuera de Sprint 1:
 
 - MissionKernel funcional
 - Planner funcional
@@ -96,4 +100,3 @@ Fuera de Sprint 0:
 - experiment lab funcional
 - reward engine funcional
 - capability promotion real
-- separación física del árbol a `services/`/`shared/`
