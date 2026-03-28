@@ -3,8 +3,11 @@ import type {
   MissionSpec,
   ResponseEnvelope,
 } from "../../shared/contracts/index.js";
+import { classifyMissionInput } from "./classifier.js";
 import { executeMission } from "./executor.js";
-import { missionSpecConstraints, type Mission, type MissionResult } from "./types.js";
+import { buildMissionSpec } from "./mission-builder.js";
+import { normalizeMissionInput } from "./normalizer.js";
+import type { Mission, MissionResult } from "./types.js";
 
 function isBlank(value: string): boolean {
   return value.trim().length === 0;
@@ -63,17 +66,15 @@ export function analyzeMissionRequest(
     };
   }
 
-  const result = runMission({
-    id: request.requestId,
-    type: request.input.trim(),
-  });
+  const normalization = normalizeMissionInput(request.input);
+  const classification = classifyMissionInput(normalization.normalizedInput);
 
-  if (!result.ok) {
+  if (classification.type === "unknown") {
     return {
       requestId: request.requestId,
       ok: false,
       data: null,
-      error: result.error?.code === "UNKNOWN_MISSION" ? "mission-unsupported" : "mission-invalid",
+      error: "mission-unsupported",
       timestamp: request.requestedAt,
     };
   }
@@ -81,13 +82,11 @@ export function analyzeMissionRequest(
   return {
     requestId: request.requestId,
     ok: true,
-    data: {
-      missionId: request.requestId,
-      title: "Ping mission",
-      objective: "Respond to a ping mission",
-      constraints: [...missionSpecConstraints],
-      normalizedAt: request.requestedAt,
-    },
+    data: buildMissionSpec({
+      request,
+      classification,
+      normalization,
+    }),
     error: null,
     timestamp: request.requestedAt,
   };

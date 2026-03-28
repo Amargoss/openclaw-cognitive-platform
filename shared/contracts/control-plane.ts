@@ -25,6 +25,10 @@ export interface MissionAnalyzeRequest {
 
 export interface MissionSpec {
   missionId: string;
+  type: "ping" | "info" | "action" | "unknown";
+  intent: string;
+  entities: string[];
+  confidence: number;
   title: string;
   objective: string;
   constraints: string[];

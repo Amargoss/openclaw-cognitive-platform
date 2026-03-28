@@ -67,6 +67,10 @@ describe("services/_bootstrap/http", () => {
         ok: true,
         data: {
           missionId: "unused",
+          type: "ping",
+          intent: "ping",
+          entities: [],
+          confidence: 1,
           title: "unused",
           objective: "unused",
           constraints: [],
@@ -104,6 +108,10 @@ describe("services/_bootstrap/http", () => {
         ok: true,
         data: {
           missionId: request.requestId,
+          type: "ping",
+          intent: "ping",
+          entities: [],
+          confidence: 1,
           title: "Ping mission",
           objective: "Respond to a ping mission",
           constraints: ["local-only", "no-network", "no-persistence"],
@@ -131,6 +139,10 @@ describe("services/_bootstrap/http", () => {
       ok: true,
       data: {
         missionId: "req-1",
+        type: "ping",
+        intent: "ping",
+        entities: [],
+        confidence: 1,
         title: "Ping mission",
         objective: "Respond to a ping mission",
         constraints: ["local-only", "no-network", "no-persistence"],
