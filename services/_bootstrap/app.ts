@@ -6,6 +6,7 @@ import {
   resetBootstrapLogger,
   type BootstrapLoggerConfig,
 } from "../../shared/logging/index.js";
+import { analyzeMissionRequest } from "../mission-kernel/index.js";
 import { createBootstrapHttpServer } from "./http.js";
 import { createBootstrapState, type BootstrapStateSnapshot } from "./state.js";
 
@@ -43,6 +44,7 @@ export function createBootstrapApp(env: NodeJS.ProcessEnv = process.env): Bootst
         errors: snapshot.errors,
       };
     },
+    analyzeMissionRequest,
   });
 
   return {

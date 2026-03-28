@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { runMission } from "./index.js";
+import { analyzeMissionRequest, runMission } from "./index.js";
 
 describe("services/mission-kernel", () => {
   it("executes a ping mission", () => {
@@ -52,6 +52,46 @@ describe("services/mission-kernel", () => {
         code: "INVALID_MISSION",
         message: "Mission id must not be empty",
       },
+    });
+  });
+
+  it("analyzes a canonical ping mission request", () => {
+    const result = analyzeMissionRequest({
+      requestId: "req-1",
+      source: "bootstrap-http",
+      input: "ping",
+      requestedAt: "2026-03-27T00:00:00.000Z",
+    });
+
+    expect(result).toEqual({
+      requestId: "req-1",
+      ok: true,
+      data: {
+        missionId: "req-1",
+        title: "Ping mission",
+        objective: "Respond to a ping mission",
+        constraints: ["local-only", "no-network", "no-persistence"],
+        normalizedAt: "2026-03-27T00:00:00.000Z",
+      },
+      error: null,
+      timestamp: "2026-03-27T00:00:00.000Z",
+    });
+  });
+
+  it("returns a controlled envelope error for an unsupported mission request", () => {
+    const result = analyzeMissionRequest({
+      requestId: "req-2",
+      source: "bootstrap-http",
+      input: "unknown",
+      requestedAt: "2026-03-27T00:00:00.000Z",
+    });
+
+    expect(result).toEqual({
+      requestId: "req-2",
+      ok: false,
+      data: null,
+      error: "mission-unsupported",
+      timestamp: "2026-03-27T00:00:00.000Z",
     });
   });
 });

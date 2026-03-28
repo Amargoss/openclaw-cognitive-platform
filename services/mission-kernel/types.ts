@@ -20,3 +20,5 @@ export interface MissionResult {
   data: Record<string, unknown> | null;
   error: MissionError | null;
 }
+
+export const missionSpecConstraints = ["local-only", "no-network", "no-persistence"] as const;
