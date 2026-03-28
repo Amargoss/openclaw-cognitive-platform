@@ -44,13 +44,18 @@ export interface PlanCreateRequest {
 export interface ExecutionPlanStep {
   stepId: string;
   title: string;
+  kind: "respond" | "inform" | "identify-target" | "prepare-action";
+  description: string;
   status: "pending";
 }
 
 export interface ExecutionPlan {
   planId: string;
   missionId: string;
+  planType: MissionSpec["type"];
+  intent: string;
   steps: ExecutionPlanStep[];
+  confidence: number;
   createdAt: string;
 }
 

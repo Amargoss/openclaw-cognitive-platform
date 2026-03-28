@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { controlPlaneContractIds, type MissionSpec, type ResponseEnvelope } from "./index.js";
+import {
+  controlPlaneContractIds,
+  type ExecutionPlan,
+  type MissionSpec,
+  type ResponseEnvelope,
+} from "./index.js";
 
 describe("shared/contracts", () => {
   it("exports the canonical Sprint 1 contract ids", () => {
@@ -34,5 +39,28 @@ describe("shared/contracts", () => {
 
     expect(missionSpec.type).toBe("info");
     expect(missionSpec.intent).toBe("describe_capabilities");
+  });
+
+  it("supports an enriched canonical execution plan shape", () => {
+    const plan: ExecutionPlan = {
+      planId: "plan:req-1",
+      missionId: "req-1",
+      planType: "action",
+      intent: "open_application",
+      confidence: 0.9,
+      steps: [
+        {
+          stepId: "plan:req-1:step-1",
+          title: "Identify target application",
+          kind: "identify-target",
+          description: "Identify the application referenced by the mission",
+          status: "pending",
+        },
+      ],
+      createdAt: "2026-03-28T00:00:00.000Z",
+    };
+
+    expect(plan.planType).toBe("action");
+    expect(plan.steps[0]?.kind).toBe("identify-target");
   });
 });
