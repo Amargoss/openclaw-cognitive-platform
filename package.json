@@ -1,17 +1,17 @@
 {
   "name": "openclaw",
   "version": "2026.3.23",
-  "description": "Multi-channel AI gateway with extensible messaging integrations",
+  "description": "OpenClaw cognitive platform fork with explicit control-plane rebaseline over the real implemented tree",
   "keywords": [],
-  "homepage": "https://github.com/openclaw/openclaw#readme",
+  "homepage": "https://github.com/Amargoss/openclaw-cognitive-platform#readme",
   "bugs": {
-    "url": "https://github.com/openclaw/openclaw/issues"
+    "url": "https://github.com/Amargoss/openclaw-cognitive-platform/issues"
   },
   "license": "MIT",
   "author": "",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/openclaw/openclaw.git"
+    "url": "git+https://github.com/Amargoss/openclaw-cognitive-platform.git"
   },
   "bin": {
     "openclaw": "openclaw.mjs"

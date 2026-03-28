@@ -1,6 +1,9 @@
 import { createBootstrapApp } from "./app.js";
+import { createMissionKernelMissionAnalyzer } from "./ports/mission-kernel-adapter.js";
 
-const app = createBootstrapApp(process.env);
+const app = createBootstrapApp(process.env, {
+  missionAnalyzer: createMissionKernelMissionAnalyzer(),
+});
 
 async function main() {
   await app.start();

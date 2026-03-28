@@ -1,4 +1,4 @@
-# 🦞 OpenClaw — Personal AI Assistant
+# 🦞 OpenClaw Cognitive Platform
 
 <p align="center">
     <picture>
@@ -18,10 +18,12 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge" alt="MIT License"></a>
 </p>
 
-**OpenClaw** is a _personal AI assistant_ you run on your own devices.
-It answers you on the channels you already use (WhatsApp, Telegram, Slack, Discord, Google Chat, Signal, iMessage, BlueBubbles, IRC, Microsoft Teams, Matrix, Feishu, LINE, Mattermost, Nextcloud Talk, Nostr, Synology Chat, Tlon, Twitch, Zalo, Zalo Personal, WebChat). It can speak and listen on macOS/iOS/Android, and can render a live Canvas you control. The Gateway is just the control plane — the product is the assistant.
+**OpenClaw Cognitive Platform** is the `Amargoss/openclaw-cognitive-platform` fork mounted on top of the real OpenClaw runtime.
+It keeps OpenClaw as the substrate for channels, sessions, tools, nodes, and operational memory, while this fork incrementally defines a separate cognitive control plane with explicit authority, ownership, contracts, and freeze boundaries.
 
-If you want a personal, single-user assistant that feels local, fast, and always-on, this is it.
+This repository is not documented correctly if it is described as "still in Sprint 0/1". The canonical sprint catalog remains the target reference, but the active branch already contains implemented pieces that approximately correspond to Sprint 1, Sprint 2, Sprint 3, and part of Sprint 5.
+
+Lo ya implementado en esta rama ≈ Sprint 0-5 del catálogo, con huecos abiertos todavía en Sprint 4 y Sprint 6+.
 
 [Website](https://openclaw.ai) · [Docs](https://docs.openclaw.ai) · [Vision](VISION.md) · [DeepWiki](https://deepwiki.com/openclaw/openclaw) · [Getting Started](https://docs.openclaw.ai/start/getting-started) · [Updating](https://docs.openclaw.ai/install/updating) · [Showcase](https://docs.openclaw.ai/start/showcase) · [FAQ](https://docs.openclaw.ai/help/faq) · [Onboarding](https://docs.openclaw.ai/start/wizard) · [Nix](https://github.com/openclaw/nix-openclaw) · [Docker](https://docs.openclaw.ai/install/docker) · [Discord](https://discord.gg/clawd)
 
@@ -29,6 +31,29 @@ Preferred setup: run `openclaw onboard` in your terminal.
 OpenClaw Onboard guides you step by step through setting up the gateway, workspace, channels, and skills. It is the recommended CLI setup path and works on **macOS, Linux, and Windows (via WSL2; strongly recommended)**.
 Works with npm, pnpm, or bun.
 New install? Start here: [Getting started](https://docs.openclaw.ai/start/getting-started)
+
+## Implementation status
+
+- Canonical sprint catalog: roadmap target and governance reference. It is not deleted, renumbered, or redefined by this fork.
+- Estado real implementado: the current tree already includes `shared/**`, `services/_bootstrap/**`, `services/mission-kernel/**`, `services/planner/**`, and `services/execution/**`.
+- Official approximate mapping:
+  - Sprint 0: architectural freeze and ownership baseline are already partially materialized.
+  - Sprint 1: bootstrap/config/logging/contracts/db base exists in `shared/**` and `services/_bootstrap/**`.
+  - Sprint 2: `services/mission-kernel/**` exists and is tested.
+  - Sprint 3: `services/planner/**` exists and is tested.
+  - Sprint 4: still open as a formal RuntimeRegistry milestone.
+  - Sprint 5: partially approximated by `services/execution/**`, without implying full canonical closure.
+  - Sprint 6+: still open.
+- Freeze zones that must not absorb new sovereign logic during this rebaseline:
+  - `services/mission-kernel/**`
+  - `services/planner/**`
+  - `services/execution/**`
+  - `src/gateway/control-plane-audit.ts`
+  - `src/gateway/control-plane-rate-limit.ts`
+  - `src/memory/**`
+  - `extensions/memory-core/**`
+  - `extensions/memory-lancedb/**`
+- Rule of interpretation: the real tree defines the implemented state. Any contradiction between the canonical catalog and the branch is alignment debt, not an excuse to deny existing code.
 
 ## Sponsors
 

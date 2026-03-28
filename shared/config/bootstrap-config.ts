@@ -1,6 +1,6 @@
 import os from "node:os";
 import path from "node:path";
-import { resolveConfigDir } from "../../src/utils.js";
+import { resolveBootstrapConfigDir } from "./bootstrap-paths.js";
 
 export type BootstrapLogLevel = "silent" | "error" | "warn" | "info" | "debug" | "trace";
 
@@ -42,7 +42,7 @@ export function loadBootstrapConfig(
   env: NodeJS.ProcessEnv = process.env,
   homedir: () => string = os.homedir,
 ): BootstrapConfig {
-  const stateDir = resolveConfigDir(env, homedir);
+  const stateDir = resolveBootstrapConfigDir(env, homedir);
   return {
     host: env.OPENCLAW_BOOTSTRAP_HOST?.trim() || DEFAULT_BOOTSTRAP_HOST,
     port: parsePort(env.OPENCLAW_BOOTSTRAP_PORT),

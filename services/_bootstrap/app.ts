@@ -6,8 +6,8 @@ import {
   resetBootstrapLogger,
   type BootstrapLoggerConfig,
 } from "../../shared/logging/index.js";
-import { analyzeMissionRequest } from "../mission-kernel/index.js";
 import { createBootstrapHttpServer } from "./http.js";
+import type { MissionAnalyzerPort } from "./ports/mission-analyzer.js";
 import { createBootstrapState, type BootstrapStateSnapshot } from "./state.js";
 
 export type BootstrapApp = {
@@ -19,7 +19,14 @@ export type BootstrapApp = {
   getSnapshot: () => BootstrapStateSnapshot;
 };
 
-export function createBootstrapApp(env: NodeJS.ProcessEnv = process.env): BootstrapApp {
+export type BootstrapAppDeps = {
+  missionAnalyzer: MissionAnalyzerPort;
+};
+
+export function createBootstrapApp(
+  env: NodeJS.ProcessEnv = process.env,
+  deps: BootstrapAppDeps,
+): BootstrapApp {
   const state = createBootstrapState();
   const config = loadBootstrapConfig(env);
   state.markCheck("config");
@@ -44,7 +51,7 @@ export function createBootstrapApp(env: NodeJS.ProcessEnv = process.env): Bootst
         errors: snapshot.errors,
       };
     },
-    analyzeMissionRequest,
+    missionAnalyzer: deps.missionAnalyzer,
   });
 
   return {

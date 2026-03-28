@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 import {
+  createResponseEnvelopeSchema,
   controlPlaneContractIds,
+  ExecutionPlanSchema,
+  MissionAnalyzeRequestSchema,
+  MissionSpecSchema,
   type ExecutionPlan,
   type MissionSpec,
   type ResponseEnvelope,
@@ -62,5 +66,84 @@ describe("shared/contracts", () => {
 
     expect(plan.planType).toBe("action");
     expect(plan.steps[0]?.kind).toBe("identify-target");
+  });
+
+  it("validates MissionAnalyzeRequest at runtime", () => {
+    const result = MissionAnalyzeRequestSchema.safeParse({
+      requestId: "req-1",
+      source: "bootstrap-http",
+      input: "ping",
+      requestedAt: "2026-03-27T00:00:00.000Z",
+    });
+
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects invalid MissionAnalyzeRequest payloads at runtime", () => {
+    const result = MissionAnalyzeRequestSchema.safeParse({
+      requestId: "req-1",
+      source: "bootstrap-http",
+      requestedAt: "2026-03-27T00:00:00.000Z",
+    });
+
+    expect(result.success).toBe(false);
+  });
+
+  it("validates MissionSpec response envelopes at runtime", () => {
+    const schema = createResponseEnvelopeSchema(MissionSpecSchema);
+    const result = schema.safeParse({
+      requestId: "req-1",
+      ok: true,
+      data: {
+        missionId: "req-1",
+        type: "info",
+        intent: "describe_capabilities",
+        entities: [],
+        confidence: 0.9,
+        title: "Capability information mission",
+        objective: "Answer a basic capability question",
+        constraints: ["local-only", "no-network", "no-persistence"],
+        normalizedAt: "2026-03-27T00:00:00.000Z",
+      },
+      error: null,
+      timestamp: "2026-03-27T00:00:00.000Z",
+    });
+
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects invalid MissionSpec response envelopes at runtime", () => {
+    const schema = createResponseEnvelopeSchema(MissionSpecSchema);
+    const result = schema.safeParse({
+      requestId: "req-1",
+      ok: true,
+      data: null,
+      error: null,
+      timestamp: "2026-03-27T00:00:00.000Z",
+    });
+
+    expect(result.success).toBe(false);
+  });
+
+  it("validates ExecutionPlan at runtime", () => {
+    const result = ExecutionPlanSchema.safeParse({
+      planId: "plan:req-1",
+      missionId: "req-1",
+      planType: "action",
+      intent: "open_application",
+      confidence: 0.9,
+      steps: [
+        {
+          stepId: "plan:req-1:step-1",
+          title: "Identify target application",
+          kind: "identify-target",
+          description: "Identify the application referenced by the mission",
+          status: "pending",
+        },
+      ],
+      createdAt: "2026-03-28T00:00:00.000Z",
+    });
+
+    expect(result.success).toBe(true);
   });
 });

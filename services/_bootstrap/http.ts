@@ -1,9 +1,10 @@
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from "node:http";
-import type {
-  MissionAnalyzeRequest,
-  MissionSpec,
-  ResponseEnvelope,
+import type { ResponseEnvelope } from "../../shared/contracts/index.js";
+import {
+  MissionAnalyzeRequestSchema,
+  MissionSpecResponseEnvelopeSchema,
 } from "../../shared/contracts/index.js";
+import type { MissionAnalyzerPort } from "./ports/mission-analyzer.js";
 
 type ReadinessPayload = {
   status: "ok" | "not-ready";
@@ -35,23 +36,21 @@ function readRequestBody(req: IncomingMessage): Promise<string> {
   });
 }
 
-function isMissionAnalyzeRequest(value: unknown): value is MissionAnalyzeRequest {
-  if (!value || typeof value !== "object") {
-    return false;
+function resolveRequestIdCandidate(value: unknown): string {
+  if (
+    value &&
+    typeof value === "object" &&
+    "requestId" in value &&
+    typeof (value as { requestId?: unknown }).requestId === "string"
+  ) {
+    return (value as { requestId: string }).requestId;
   }
-
-  const candidate = value as Record<string, unknown>;
-  return (
-    typeof candidate.requestId === "string" &&
-    typeof candidate.source === "string" &&
-    typeof candidate.input === "string" &&
-    typeof candidate.requestedAt === "string"
-  );
+  return "bootstrap-invalid-request";
 }
 
 export function createBootstrapHttpServer(params: {
   getReadyState: () => { ready: boolean; checks: Record<string, boolean>; errors: string[] };
-  analyzeMissionRequest: (request: MissionAnalyzeRequest) => ResponseEnvelope<MissionSpec>;
+  missionAnalyzer: MissionAnalyzerPort;
 }): Server {
   return createServer((req: IncomingMessage, res: ServerResponse) => {
     void (async () => {
@@ -109,14 +108,9 @@ export function createBootstrapHttpServer(params: {
           return;
         }
 
-        if (!isMissionAnalyzeRequest(parsedBody)) {
-          const requestId =
-            parsedBody &&
-            typeof parsedBody === "object" &&
-            "requestId" in parsedBody &&
-            typeof parsedBody.requestId === "string"
-              ? parsedBody.requestId
-              : "bootstrap-invalid-request";
+        const requestValidation = MissionAnalyzeRequestSchema.safeParse(parsedBody);
+        if (!requestValidation.success) {
+          const requestId = resolveRequestIdCandidate(parsedBody);
 
           writeEnvelope(res, 400, {
             requestId,
@@ -128,8 +122,20 @@ export function createBootstrapHttpServer(params: {
           return;
         }
 
-        const result = params.analyzeMissionRequest(parsedBody);
-        writeEnvelope(res, result.ok ? 200 : 422, result);
+        const result = params.missionAnalyzer.analyzeMissionRequest(requestValidation.data);
+        const responseValidation = MissionSpecResponseEnvelopeSchema.safeParse(result);
+        if (!responseValidation.success) {
+          writeEnvelope(res, 500, {
+            requestId: requestValidation.data.requestId,
+            ok: false,
+            data: null,
+            error: "bootstrap-internal-error",
+            timestamp: new Date().toISOString(),
+          });
+          return;
+        }
+
+        writeEnvelope(res, responseValidation.data.ok ? 200 : 422, responseValidation.data);
         return;
       }
 

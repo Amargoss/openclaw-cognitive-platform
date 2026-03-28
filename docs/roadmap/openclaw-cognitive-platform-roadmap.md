@@ -1,8 +1,28 @@
 # OpenClaw Cognitive Platform Roadmap
 
+## 0. Nota de interpretación obligatoria
+
+El catálogo canónico de sprints 0–14 se mantiene intacto como referencia de destino.
+
+El estado real implementado de la rama se define por el árbol actual del repositorio, no por una narrativa congelada en Sprint 0 o Sprint 1.
+
+Mapa oficial aproximado entre catálogo canónico y estado real implementado:
+
+- Sprint 0: freeze arquitectónico y baseline documental ya superados parcialmente.
+- Sprint 1: base física presente en `shared/**` y `services/_bootstrap/**`.
+- Sprint 2: `services/mission-kernel/**` ya existe y está probado.
+- Sprint 3: `services/planner/**` ya existe y está probado.
+- Sprint 4: sigue abierto como gap de RuntimeRegistry formal.
+- Sprint 5: `services/execution/**` aproxima parte de la ejecución/orquestación mínima, sin implicar cierre total del sprint canónico.
+- Sprint 6+: siguen abiertos.
+
+Lo ya implementado en esta rama ≈ Sprint 0-5 del catálogo, con huecos abiertos todavía en Sprint 4 y Sprint 6+.
+
+Cualquier contradicción entre el catálogo canónico y la rama activa debe tratarse como deuda de alineación. No se acepta usar esa contradicción para negar código real ya presente en `shared/**`, `services/**`, `src/**` o `extensions/**`.
+
 ## 1. Estado actual del repositorio
 
-El repositorio real parte de OpenClaw ya implementado como runtime operativo, organizado principalmente bajo `src/`. No existe todavía una topología física separada en `services/`, `shared/` y `adapters/`.
+El repositorio real parte de OpenClaw ya implementado como runtime operativo, organizado principalmente bajo `src/`, pero ya no puede describirse correctamente como un árbol sin topología física separada adicional. La rama activa ya incorpora `services/**` y `shared/**` como superficies reales del rebaseline y del bootstrap/control-plane mínimo.
 
 ### Mapa factual actual
 
@@ -17,6 +37,12 @@ El repositorio real parte de OpenClaw ya implementado como runtime operativo, or
 - `apps/`: adapters móviles y desktop
 - `extensions/`: plugins y conectores
 - `skills/`: skills subordinadas
+- `services/_bootstrap`: bootstrap mínimo, health/readiness y wiring inicial
+- `services/mission-kernel`: análisis y normalización mínima de misión
+- `services/planner`: generación mínima de planes
+- `services/execution`: ejecución mínima determinista
+- `shared/contracts`: contratos canónicos tipados mínimos
+- `shared/config`, `shared/db`, `shared/logging`: base bootstrap ya implementada
 - `src/acp/control-plane`: embrión actual de control plane
 - `src/acp/runtime`: embrión actual de runtime registry local
 - `src/memory`: memoria local, embeddings, indexado y búsqueda
@@ -41,10 +67,10 @@ El repositorio real parte de OpenClaw ya implementado como runtime operativo, or
 - hay semántica de control plane en `src/gateway`
 - la memoria está repartida entre `src/memory`, `extensions/memory-core` y `extensions/memory-lancedb`
 - no existe todavía una fuente de verdad documental completa para roadmap, authority, ownership y contratos
-- no existe aún implementación canónica de:
-  - MissionKernel
-  - Planner
-  - Orchestrator
+- la implementación canónica sigue incompleta y desalineada respecto del catálogo objetivo
+- existen implementaciones mínimas reales de MissionKernel, Planner y una capa de ejecución aproximada, pero no equivalen al cierre total de todos los sprints canónicos relacionados
+- siguen sin implementación canónica cerrada:
+  - RuntimeRegistry
   - GovernanceController
   - CapabilityRegistry
   - DocumentPipeline

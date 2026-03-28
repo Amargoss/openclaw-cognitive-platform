@@ -5,7 +5,7 @@ import {
   setLoggerOverride,
   type LogLevel,
   type SubsystemLogger,
-} from "../../src/logging.js";
+} from "./legacy-logging-bridge.js";
 
 export type BootstrapLoggerConfig = {
   stateDir: string;
