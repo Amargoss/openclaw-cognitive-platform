@@ -12,6 +12,8 @@ type ReadinessPayload = {
   errors?: string[];
 };
 
+const MAX_BODY_SIZE = 1_000_000; // 1MB
+
 function writeJson(res: ServerResponse, statusCode: number, body: unknown) {
   res.statusCode = statusCode;
   res.setHeader("Content-Type", "application/json; charset=utf-8");
@@ -22,17 +24,47 @@ function writeEnvelope<T>(res: ServerResponse, statusCode: number, body: Respons
   writeJson(res, statusCode, body);
 }
 
-function readRequestBody(req: IncomingMessage): Promise<string> {
+function readRequestBody(req: IncomingMessage, res: ServerResponse): Promise<string | null> {
   return new Promise((resolve, reject) => {
     let body = "";
-    req.setEncoding("utf8");
-    req.on("data", (chunk: string) => {
-      body += chunk;
+    let size = 0;
+    let aborted = false;
+
+    req.on("data", (chunk: Buffer) => {
+      if (aborted) {
+        return;
+      }
+
+      size += chunk.length;
+
+      if (size > MAX_BODY_SIZE) {
+        aborted = true;
+
+        writeJson(res, 413, {
+          requestId: "bootstrap-payload-too-large",
+          ok: false,
+          data: null,
+          error: "payload-too-large",
+          timestamp: new Date().toISOString(),
+        });
+
+        req.destroy();
+        resolve(null);
+        return;
+      }
+
+      body += chunk.toString("utf-8");
     });
+
     req.on("end", () => {
-      resolve(body);
+      if (!aborted) {
+        resolve(body);
+      }
     });
-    req.on("error", reject);
+
+    req.on("error", (err) => {
+      reject(err);
+    });
   });
 }
 
@@ -55,6 +87,10 @@ export function createBootstrapHttpServer(params: {
   return createServer((req: IncomingMessage, res: ServerResponse) => {
     void (async () => {
       const pathname = req.url ?? "/";
+
+      // -----------------------------
+      // HEALTH
+      // -----------------------------
       if (pathname === "/health" || pathname === "/healthz") {
         const body: ResponseEnvelope<{ status: "ok" }> = {
           requestId: "bootstrap-health",
@@ -63,11 +99,17 @@ export function createBootstrapHttpServer(params: {
           error: null,
           timestamp: new Date().toISOString(),
         };
+
         writeEnvelope(res, 200, body);
         return;
       }
+
+      // -----------------------------
+      // READINESS
+      // -----------------------------
       if (pathname === "/ready" || pathname === "/readyz") {
         const snapshot = params.getReadyState();
+
         const body: ResponseEnvelope<ReadinessPayload> = snapshot.ready
           ? {
               requestId: "bootstrap-ready",
@@ -87,12 +129,22 @@ export function createBootstrapHttpServer(params: {
               error: "bootstrap-not-ready",
               timestamp: new Date().toISOString(),
             };
+
         writeEnvelope(res, snapshot.ready ? 200 : 503, body);
         return;
       }
 
+      // -----------------------------
+      // MISSION ANALYZE
+      // -----------------------------
       if (pathname === "/missions/analyze" && req.method === "POST") {
-        const rawBody = await readRequestBody(req);
+        const rawBody = await readRequestBody(req, res);
+
+        // Si fue abortado por tamaño → ya respondimos
+        if (rawBody === null) {
+          return;
+        }
+
         let parsedBody: unknown;
 
         try {
@@ -108,7 +160,11 @@ export function createBootstrapHttpServer(params: {
           return;
         }
 
+        // -----------------------------
+        // VALIDACIÓN INPUT (SCHEMA)
+        // -----------------------------
         const requestValidation = MissionAnalyzeRequestSchema.safeParse(parsedBody);
+
         if (!requestValidation.success) {
           const requestId = resolveRequestIdCandidate(parsedBody);
 
@@ -122,8 +178,16 @@ export function createBootstrapHttpServer(params: {
           return;
         }
 
+        // -----------------------------
+        // EJECUCIÓN (PORT)
+        // -----------------------------
         const result = params.missionAnalyzer.analyzeMissionRequest(requestValidation.data);
+
+        // -----------------------------
+        // VALIDACIÓN OUTPUT (SCHEMA)
+        // -----------------------------
         const responseValidation = MissionSpecResponseEnvelopeSchema.safeParse(result);
+
         if (!responseValidation.success) {
           writeEnvelope(res, 500, {
             requestId: requestValidation.data.requestId,
@@ -139,6 +203,9 @@ export function createBootstrapHttpServer(params: {
         return;
       }
 
+      // -----------------------------
+      // NOT FOUND
+      // -----------------------------
       res.statusCode = 404;
       res.end("not found");
     })().catch(() => {

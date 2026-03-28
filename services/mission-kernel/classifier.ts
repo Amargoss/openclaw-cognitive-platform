@@ -1,28 +1,89 @@
+/**
+ * Mission Classifier
+ * ------------------
+ * Responsable de:
+ * - Clasificar tipo de misión (ping | info | action | unknown)
+ * - Determinar intent básico cuando aplica
+ * - Entregar confidence determinista
+ *
+ *   No:
+ * - No normaliza entidades
+ * - No construye MissionSpec completo
+ * - No decide policy
+ */
+
 export const missionCategories = ["ping", "info", "action", "unknown"] as const;
 
 export type MissionCategory = (typeof missionCategories)[number];
 
 export interface ClassifiedMission {
   type: MissionCategory;
+  intent?: string; //  FIX: necesario para evitar drift con planner
   confidence: number;
 }
+
+// -----------------------------
+// Patterns
+// -----------------------------
 
 const infoPatterns = ["que puedes hacer", "qué puedes hacer", "what can you do", "help"] as const;
 
 const actionPatterns = [/^abre\s+/, /^open\s+/, /^launch\s+/] as const;
 
+// -----------------------------
+// Utils
+// -----------------------------
+
+function normalizeInput(input: string): string {
+  return input.trim().toLowerCase();
+}
+
+// -----------------------------
+// Main classifier
+// -----------------------------
+
 export function classifyMissionInput(input: string): ClassifiedMission {
-  if (input === "ping") {
-    return { type: "ping", confidence: 1 };
+  const normalized = normalizeInput(input);
+
+  // -----------------------------
+  // PING
+  // -----------------------------
+  if (normalized === "ping") {
+    return {
+      type: "ping",
+      intent: "health_check",
+      confidence: 1,
+    };
   }
 
-  if (infoPatterns.includes(input as (typeof infoPatterns)[number])) {
-    return { type: "info", confidence: 0.9 };
+  // -----------------------------
+  // INFO
+  // -----------------------------
+  if (infoPatterns.includes(normalized as (typeof infoPatterns)[number])) {
+    return {
+      type: "info",
+      intent: "describe_capabilities",
+      confidence: 0.9,
+    };
   }
 
-  if (actionPatterns.some((pattern) => pattern.test(input))) {
-    return { type: "action", confidence: 0.9 };
+  // -----------------------------
+  // ACTION (CONTROLADO)
+  // -----------------------------
+  if (actionPatterns.some((pattern) => pattern.test(normalized))) {
+    return {
+      type: "action",
+      intent: "open_application", // FIX CRÍTICO
+      confidence: 0.9,
+    };
   }
 
-  return { type: "unknown", confidence: 0.2 };
+  // -----------------------------
+  // UNKNOWN (SAFE FALLBACK)
+  // -----------------------------
+  return {
+    type: "unknown",
+    intent: "unknown",
+    confidence: 0.2,
+  };
 }

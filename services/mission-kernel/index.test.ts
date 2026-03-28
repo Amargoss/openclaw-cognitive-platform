@@ -106,11 +106,27 @@ describe("services/mission-kernel", () => {
   });
 
   it("classifies supported mission categories", () => {
-    expect(classifyMissionInput("ping")).toEqual({ type: "ping", confidence: 1 });
-    expect(classifyMissionInput("qué puedes hacer")).toEqual({ type: "info", confidence: 0.9 });
-    expect(classifyMissionInput("abre spotify")).toEqual({ type: "action", confidence: 0.9 });
+    expect(classifyMissionInput("ping")).toEqual({
+      type: "ping",
+      intent: "health_check",
+      confidence: 1,
+    });
+
+    expect(classifyMissionInput("qué puedes hacer")).toEqual({
+      type: "info",
+      intent: "describe_capabilities",
+      confidence: 0.9,
+    });
+
+    expect(classifyMissionInput("abre spotify")).toEqual({
+      type: "action",
+      intent: "open_application",
+      confidence: 0.9,
+    });
+
     expect(classifyMissionInput("algo irreconocible")).toEqual({
       type: "unknown",
+      intent: "unknown",
       confidence: 0.2,
     });
   });
@@ -141,6 +157,7 @@ describe("services/mission-kernel", () => {
       },
       classification: {
         type: "action",
+        intent: "open_application",
         confidence: 0.9,
       },
       normalization: {
