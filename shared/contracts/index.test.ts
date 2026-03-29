@@ -55,17 +55,21 @@ describe("shared/contracts", () => {
       steps: [
         {
           stepId: "plan:req-1:step-1",
-          title: "Identify target application",
-          kind: "identify-target",
-          description: "Identify the application referenced by the mission",
+          title: "Prepare application action",
+          kind: "prepare-action",
+          description: "Prepare an action plan for opening the target application",
           status: "pending",
+          target: {
+            type: "application",
+            appId: "spotify",
+          },
         },
       ],
       createdAt: "2026-03-28T00:00:00.000Z",
     };
 
     expect(plan.planType).toBe("action");
-    expect(plan.steps[0]?.kind).toBe("identify-target");
+    expect(plan.steps[0]?.target?.appId).toBe("spotify");
   });
 
   it("validates MissionAnalyzeRequest at runtime", () => {
@@ -135,15 +139,45 @@ describe("shared/contracts", () => {
       steps: [
         {
           stepId: "plan:req-1:step-1",
-          title: "Identify target application",
-          kind: "identify-target",
-          description: "Identify the application referenced by the mission",
+          title: "Prepare application action",
+          kind: "prepare-action",
+          description: "Prepare an action plan for opening the target application",
           status: "pending",
+          target: {
+            type: "application",
+            appId: "spotify",
+          },
         },
       ],
       createdAt: "2026-03-28T00:00:00.000Z",
     });
 
     expect(result.success).toBe(true);
+  });
+
+  it("rejects an invalid execution target at runtime", () => {
+    const result = ExecutionPlanSchema.safeParse({
+      planId: "plan:req-1",
+      missionId: "req-1",
+      planType: "action",
+      intent: "open_application",
+      confidence: 0.9,
+      steps: [
+        {
+          stepId: "plan:req-1:step-1",
+          title: "Prepare application action",
+          kind: "prepare-action",
+          description: "Prepare an action plan for opening the target application",
+          status: "pending",
+          target: {
+            type: "application",
+            appId: "",
+          },
+        },
+      ],
+      createdAt: "2026-03-28T00:00:00.000Z",
+    });
+
+    expect(result.success).toBe(false);
   });
 });

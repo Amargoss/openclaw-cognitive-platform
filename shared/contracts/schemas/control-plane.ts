@@ -27,6 +27,12 @@ export const ExecutionPlanStepSchema = z.object({
   kind: z.enum(["respond", "inform", "identify-target", "prepare-action"]),
   description: z.string(),
   status: z.literal("pending"),
+  target: z
+    .object({
+      type: z.literal("application"),
+      appId: z.string().min(1),
+    })
+    .optional(),
 });
 
 export const ExecutionPlanSchema = z.object({
