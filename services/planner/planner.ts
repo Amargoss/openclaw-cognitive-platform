@@ -17,6 +17,20 @@ function createStepId(planId: string, sequence: number): string {
   return `${planId}:step-${sequence}`;
 }
 
+function resolveApplicationTarget(entities: string[] | undefined): { appId: string } | null {
+  if (!entities || entities.length === 0) {
+    return null;
+  }
+
+  const appId = entities[0]?.trim();
+
+  if (!appId) {
+    return null;
+  }
+
+  return { appId };
+}
+
 function createPingSteps(planId: string): ExecutionPlanStep[] {
   return [
     {
@@ -48,7 +62,13 @@ function createInfoSteps(planId: string): ExecutionPlanStep[] {
   ];
 }
 
-function createActionSteps(planId: string): ExecutionPlanStep[] {
+function createActionSteps(planId: string, mission: MissionSpec): ExecutionPlanStep[] | null {
+  const target = resolveApplicationTarget(mission.entities);
+
+  if (!target) {
+    return null;
+  }
+
   return [
     {
       stepId: createStepId(planId, 1),
@@ -59,10 +79,14 @@ function createActionSteps(planId: string): ExecutionPlanStep[] {
     },
     {
       stepId: createStepId(planId, 2),
-      title: "Prepare non-executing application action",
+      title: "Prepare application action",
       kind: "prepare-action",
-      description: "Prepare a non-executing action plan for opening the target application",
+      description: "Prepare an action plan for opening the target application",
       status: "pending",
+      target: {
+        type: "application",
+        appId: target.appId,
+      },
     },
   ];
 }
@@ -71,14 +95,20 @@ function buildSteps(mission: MissionSpec, planId: string): ExecutionPlanStep[] |
   switch (mission.type) {
     case "ping":
       return createPingSteps(planId);
+
     case "info":
       return createInfoSteps(planId);
+
     case "action":
       if (mission.intent === "open_application") {
-        return createActionSteps(planId);
+        return createActionSteps(planId, mission);
       }
       return null;
+
     case "unknown":
+      return null;
+
+    default:
       return null;
   }
 }

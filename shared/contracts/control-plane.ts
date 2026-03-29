@@ -41,12 +41,27 @@ export interface PlanCreateRequest {
   requestedAt: string;
 }
 
+export type ExecutionStepKind = "respond" | "inform" | "identify-target" | "prepare-action";
+
+export type ExecutionStepStatus = "pending" | "completed" | "failed" | "blocked";
+
+export interface ExecutionPlanStepTarget {
+  type: "application";
+  appId: string;
+}
+
 export interface ExecutionPlanStep {
   stepId: string;
   title: string;
-  kind: "respond" | "inform" | "identify-target" | "prepare-action";
+  kind: ExecutionStepKind;
   description: string;
-  status: "pending";
+  status: ExecutionStepStatus;
+
+  /**
+   * Target explícito requerido para ejecución real.
+   * Sólo aplica a ciertos kinds como "prepare-action".
+   */
+  target?: ExecutionPlanStepTarget;
 }
 
 export interface ExecutionPlan {
