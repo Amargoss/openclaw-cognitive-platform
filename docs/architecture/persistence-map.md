@@ -28,6 +28,14 @@
 - uso: indexado, búsqueda híbrida y recuperación
 - límite: no equivale a verdad estructurada global gobernada
 
+## SQLite bootstrap local-first
+
+- `shared/db`
+- owner canónico en Sprint 1: bootstrap del control plane
+- uso: persistencia mínima local-first del arranque bootstrap
+- ubicación esperada: `~/.openclaw/cognitive/bootstrap.sqlite` o override por env
+- límite: no equivale todavía a MemoryService ni a verdad estructurada global
+
 ## LanceDB opcional
 
 - `extensions/memory-lancedb`
@@ -63,4 +71,5 @@ Objetivo futuro, no implementado aún:
 - no mezclar memoria operativa con verdad estructurada
 - no permitir que adapters/plugins escriban verdad estructurada por sí mismos
 - no tratar `src/memory` ni `extensions/memory-lancedb` como autoridad soberana
+- no tratar `shared/db` bootstrap como reemplazo prematuro de MemoryService
 - toda persistencia estructurada futura debe pasar por contrato y governance

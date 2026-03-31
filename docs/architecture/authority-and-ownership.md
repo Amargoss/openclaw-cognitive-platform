@@ -89,6 +89,30 @@ Ningún adapter, hook, skill o plugin puede convertirse en autoridad soberana. L
 - `extensions/`, `skills/`
   - owner factual: plugins/skills subordinadas
   - prohibición: no pueden acumular policy soberana
+- `src/shared`
+  - owner factual: utilidades legacy reutilizables del runtime OpenClaw
+  - deuda: no debe confundirse con la nueva superficie canónica `shared/`
+
+## Ownership canónico fijado en Sprint 1
+
+- `shared/config`
+  - owner: configuración bootstrap del control plane
+- `shared/logging`
+  - owner: logging compartido del control plane
+- `shared/contracts`
+  - owner: contratos tipados mínimos del control plane
+- `shared/db`
+  - owner: persistencia bootstrap local-first
+- `services/_bootstrap`
+  - owner: health, readiness y arranque mínimo del bootstrap
+
+## Regla explícita `shared/**` vs `src/shared/**`
+
+- `shared/**` es la superficie canónica nueva del bootstrap/control plane.
+- `src/shared/**` permanece como biblioteca legacy del runtime OpenClaw.
+- `services/**` no puede depender de `src/shared/**`.
+- `shared/**` no puede depender de `src/shared/**`.
+- `src/shared/**` no debe recibir lógica nueva del control plane en Sprint 1.
 
 ## Decisiones de Sprint 0
 

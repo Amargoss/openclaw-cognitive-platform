@@ -133,6 +133,7 @@ La plataforma debe llegar a ser capaz de:
 ## Frontera arquitectónica objetivo
 
 ### Substrate operativo objetivo
+
 Aquí debe quedar la parte operacional apoyada en OpenClaw:
 
 - canales,
@@ -145,6 +146,7 @@ Aquí debe quedar la parte operacional apoyada en OpenClaw:
 - interacción conversacional base.
 
 ### Control plane objetivo
+
 Aquí debe vivir la lógica soberana del nuevo sistema:
 
 - clasificación,
@@ -159,6 +161,7 @@ Aquí debe vivir la lógica soberana del nuevo sistema:
 - observabilidad.
 
 ### Adapters objetivo
+
 Los adapters sólo pueden:
 
 - traducir entrada,
@@ -300,6 +303,7 @@ No diseñes como si fuera:
 ## Protocolo obligatorio de trabajo
 
 ### FASE A — AUDITORÍA REAL
+
 Debes comenzar siempre por el repositorio real.
 
 Debes identificar:
@@ -314,6 +318,7 @@ Debes identificar:
 - contradicciones entre arquitectura objetivo y código actual.
 
 ### FASE B — UBICACIÓN ARQUITECTÓNICA
+
 Antes de cambiar algo debes declarar:
 
 - módulo dueño,
@@ -326,6 +331,7 @@ Antes de cambiar algo debes declarar:
 - impacto en persistencia.
 
 ### FASE C — PLAN EXACTO
+
 Debes listar:
 
 - objetivo exacto del sprint,
@@ -341,6 +347,7 @@ Debes listar:
 - criterio de rollback.
 
 ### FASE D — IMPLEMENTACIÓN
+
 Debes:
 
 - escribir cambios completos,
@@ -350,6 +357,7 @@ Debes:
 - mantener consistencia entre docs, contratos y código.
 
 ### FASE E — VALIDACIÓN
+
 Debes incluir:
 
 - tests unitarios,
@@ -361,6 +369,7 @@ Debes incluir:
 - validación de servicios o puertos si aplica.
 
 ### FASE F — CIERRE
+
 Debes declarar explícitamente:
 
 - qué quedó resuelto,
@@ -436,7 +445,9 @@ Si aún no existen, Sprint 0 debe:
 ## Catálogo canónico de sprints
 
 ### Sprint 0 — Freeze arquitectónico
+
 Objetivo:
+
 - auditoría real del repo,
 - ownership,
 - authority,
@@ -448,7 +459,9 @@ Objetivo:
 - base documental mínima para arrancar Sprint 1.
 
 ### Sprint 1 — Bootstrap operativo
+
 Objetivo:
+
 - estructura mínima inicial,
 - configuración compartida,
 - servicios base,
@@ -457,7 +470,9 @@ Objetivo:
 - persistencia inicial.
 
 ### Sprint 2 — Mission Kernel
+
 Objetivo:
+
 - clasificación de misión,
 - normalización,
 - entidades,
@@ -466,7 +481,9 @@ Objetivo:
 - mission_id.
 
 ### Sprint 3 — Planner Engine
+
 Objetivo:
+
 - plan formal,
 - heurística base,
 - pasos,
@@ -474,7 +491,9 @@ Objetivo:
 - fallback inicial.
 
 ### Sprint 4 — Runtime Registry
+
 Objetivo:
+
 - nodos,
 - heartbeats,
 - health,
@@ -482,14 +501,18 @@ Objetivo:
 - reconciliación inicial.
 
 ### Sprint 5 — Orchestrator
+
 Objetivo:
+
 - ejecución de planes,
 - dispatch,
 - retries,
 - outcomes.
 
 ### Sprint 6 — Memory Service
+
 Objetivo:
+
 - short-term,
 - long-term,
 - operational memory,
@@ -497,7 +520,9 @@ Objetivo:
 - filtro de ruido.
 
 ### Sprint 7 — Document Pipeline
+
 Objetivo:
+
 - ingestión,
 - extracción,
 - resumen,
@@ -505,7 +530,9 @@ Objetivo:
 - persistencia documental.
 
 ### Sprint 8 — Governance + Capability Registry
+
 Objetivo:
+
 - autorización,
 - versionado,
 - staging/production,
@@ -513,7 +540,9 @@ Objetivo:
 - auditoría.
 
 ### Sprint 9 — Experiment Lab + Reward/Fitness
+
 Objetivo:
+
 - hipótesis,
 - baseline,
 - candidate,
@@ -522,21 +551,27 @@ Objetivo:
 - evidencia.
 
 ### Sprint 10 — OpenClaw Integration Layer
+
 Objetivo:
+
 - tools de alto nivel,
 - skills subordinadas,
 - hooks sin autoridad indebida,
 - alineación con sesiones y memoria operativa.
 
 ### Sprint 11 — Distributed Runtime
+
 Objetivo:
+
 - multinodo,
 - reconciliación avanzada,
 - snapshots,
 - degradación elegante.
 
 ### Sprint 12 — Administration + Observability
+
 Objetivo:
+
 - panel/API administrativa,
 - estado general,
 - historial,
@@ -544,7 +579,9 @@ Objetivo:
 - modo diagnóstico.
 
 ### Sprint 13 — Recovery y backups
+
 Objetivo:
+
 - snapshots,
 - restore,
 - backup,
@@ -552,7 +589,9 @@ Objetivo:
 - consistency checks.
 
 ### Sprint 14 — Hardening final
+
 Objetivo:
+
 - soak tests,
 - smoke suite,
 - runbooks,
@@ -575,80 +614,75 @@ Debes separarlas explícitamente.
 
 ## Bloque obligatorio del sprint activo
 
-### SPRINT ACTIVO: Sprint 0
+### SPRINT ACTIVO: S1 — Rebaseline del catálogo y estado real
 
 #### Objetivo específico
-Congelar arquitectura, authority, ownership, contratos base, límites entre OpenClaw substrate / control plane / adapters, rutas permitidas/prohibidas, puertos, persistencia y reglas de dependencia para eliminar ambigüedad y dejar el repositorio listo para Sprint 1.
+
+Alinear de forma explícita el catálogo canónico de sprints con el estado real implementado de la rama, sin abrir nuevas capacidades funcionales, sin renumerar retrospectivamente el catálogo 0–14 y sin negar el código ya existente en `shared/**` y `services/**`.
 
 #### Modo
-**AUDITORÍA + PLANIFICACIÓN + PR**
+
+**AUDITORÍA REAL + PLAN EXACTO + IMPLEMENTACIÓN CONTROLADA + VALIDACIÓN REAL**
 
 #### Alcance permitido
-- auditoría real del repositorio,
-- mapa de ownership por carpetas y módulos,
-- definición explícita substrate / control plane / adapters,
-- freeze conceptual de legacy,
-- definición de rutas permitidas y prohibidas,
-- creación de documentos de arquitectura/roadmap/contratos si faltan,
-- contratos base documentales y/o tipados mínimos,
-- ADR de authority y ownership,
-- PR template profesional,
-- mapa de servicios,
-- mapa de puertos,
-- mapa de persistencia,
-- protocolo de dependencias permitidas/prohibidas,
-- eliminación de basura técnica sólo si es claramente segura y no funcional.
+
+- corregir identidad del fork en metadata y documentación,
+- alinear `AGENTS.override.md` con el estado real de la rama,
+- alinear `README.md` con la identidad y arquitectura real del fork,
+- alinear `docs/roadmap/openclaw-cognitive-platform-roadmap.md` con una nota de interpretación correcta,
+- crear `docs/architecture/implementation-status.md`,
+- declarar freeze explícito de zonas híbridas o legacy sensibles,
+- documentar el mapeo entre sprint canónico y estado implementado,
+- introducir o ajustar notas de realineamiento en documentación base.
 
 #### Alcance prohibido
-- MissionKernel funcional completo,
-- Planner funcional completo,
-- runtime dispatch real,
+
+- nuevas features funcionales,
+- expansión de `services/mission-kernel/**`,
+- expansión de `services/planner/**`,
+- expansión de `services/execution/**`,
+- runtime registry real nuevo,
+- memory service real nuevo,
 - document pipeline real,
-- experiment lab funcional,
-- reward engine funcional,
-- capability promotion real,
-- distribuido completo,
-- UI final,
-- domótica,
-- features nuevas fuera del freeze arquitectónico,
-- refactors cosméticos,
-- cambios operativos grandes fuera de lo mínimo necesario para fijar arquitectura y contratos.
+- governance funcional nueva,
+- observability funcional nueva,
+- integración nueva con bootstrap o tools,
+- refactors cosméticos masivos,
+- cambios grandes en dependencias o scripts,
+- narrativa falsa de "seguimos en Sprint 0/1".
 
 #### Entregables mínimos
-- mapa de ownership claro,
-- freeze conceptual de legacy,
-- contratos base alineados o creados,
-- ADR de authority y ownership,
-- PR template profesional,
-- mapa de servicios, puertos, rutas y persistencia,
-- protocolo de dependencias permitido/prohibido,
-- diff documentado de CREATE / MODIFY / FREEZE / DELETE / KEEP-AS-IS.
+
+- identidad del fork corregida en metadata y docs base,
+- catálogo canónico preservado como referencia de destino,
+- estado real implementado documentado explícitamente,
+- mapeo oficial aproximado entre sprint canónico y capacidades reales ya implementadas,
+- freeze explícito de zonas híbridas sensibles,
+- diff documentado de `CREATE / MODIFY / FREEZE / DELETE / KEEP-AS-IS`.
 
 #### Validaciones mínimas
-- verificación de imports y acoplamientos,
-- verificación de consistencia entre docs y repo real,
-- validación de contradicciones vivas entre roadmap, arquitectura, ownership y contratos,
-- `python -m compileall services shared` sólo si esas rutas existen y se tocó Python,
-- smoke test de imports si se crean contratos Python,
-- validación básica de rutas/configs si se crean unit files o env files.
+
+- validación de consistencia documental entre `README.md`, `AGENTS.override.md`, roadmap e `implementation-status.md`,
+- validación de JSON de `package.json` si se toca,
+- verificación de que no se abrieron nuevas rutas funcionales,
+- verificación de que el diff real queda dentro del alcance documental declarado.
 
 #### Riesgo principal
-- dejar Sprint 0 bonito en papel pero ambiguo en el código,
-- seguir confundiendo arquitectura futura con estado actual,
-- dejar contratos base incompletos,
-- permitir que adapters o hooks sigan absorbiendo lógica central.
+
+- mantener una narrativa falsa donde la rama parece seguir en Sprint 0/1,
+- negar capacidades ya implementadas en `shared/**` y `services/**`,
+- dejar el catálogo canónico y el árbol real contando historias incompatibles.
 
 #### Criterio de cierre
-Sprint 0 sólo puede darse por cerrado si:
 
-- ownership queda claro,
-- authority queda clara,
-- substrate / control plane / adapters quedan definidos sin ambigüedad,
-- la diferencia entre árbol actual y arquitectura objetivo queda documentada,
-- los documentos base faltantes quedan creados o alineados,
-- contratos base mínimos quedan establecidos,
-- puertos/servicios/persistencia quedan documentados,
-- el repositorio queda listo para iniciar Sprint 1 sin discusión estructural.
+El rebaseline sólo puede darse por cerrado si:
+
+- el catálogo canónico sigue existiendo como referencia de destino,
+- el estado real implementado de la rama queda declarado explícitamente,
+- existe un mapeo oficial entre sprints canónicos y capacidades reales ya implementadas,
+- queda prohibida la narrativa falsa de "seguimos en Sprint 0/1",
+- el fork tiene identidad propia coherente,
+- la documentación principal cuenta la misma historia que el árbol real.
 
 ## Instrucción final
 
@@ -660,7 +694,7 @@ No improvises.
 
 No asumas que la arquitectura objetivo ya existe.
 
-Descubre primero el árbol real, luego documenta la diferencia, luego fija la arquitectura objetivo y deja Sprint 0 listo.
+Descubre primero el árbol real, luego documenta la diferencia, luego fija la interpretación correcta del catálogo canónico y deja el rebaseline narrativo listo.
 
 No avances por ansiedad.
 
