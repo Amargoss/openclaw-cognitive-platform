@@ -37,7 +37,7 @@ jobs:
       changed_extensions_matrix: ${{ steps.changed_extensions.outputs.changed_extensions_matrix || '{"include":[]}' }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6.0.3
         with:
           fetch-depth: 1
           fetch-tags: false
@@ -167,7 +167,7 @@ jobs:
     timeout-minutes: 20
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6.0.3
         with:
           submodules: false
 
@@ -205,7 +205,7 @@ jobs:
     timeout-minutes: 20
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6.0.3
         with:
           submodules: false
 
@@ -277,7 +277,7 @@ jobs:
 
       - name: Checkout
         if: github.event_name != 'pull_request' || (matrix.runtime != 'bun' && matrix.task != 'compat-node22')
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6.0.3
         with:
           submodules: false
 
@@ -331,7 +331,7 @@ jobs:
       matrix: ${{ fromJson(needs.preflight.outputs.changed_extensions_matrix) }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6.0.3
         with:
           submodules: false
 
@@ -355,7 +355,7 @@ jobs:
     timeout-minutes: 20
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6.0.3
         with:
           submodules: false
 
@@ -379,7 +379,7 @@ jobs:
     timeout-minutes: 20
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6.0.3
         with:
           submodules: false
 
@@ -477,7 +477,7 @@ jobs:
     timeout-minutes: 20
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6.0.3
         with:
           submodules: false
 
@@ -518,7 +518,7 @@ jobs:
     timeout-minutes: 20
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6.0.3
         with:
           submodules: false
 
@@ -538,7 +538,7 @@ jobs:
     timeout-minutes: 20
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6.0.3
         with:
           submodules: false
 
@@ -607,7 +607,7 @@ jobs:
             command: pnpm test
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6.0.3
         with:
           submodules: false
 
@@ -705,7 +705,7 @@ jobs:
     timeout-minutes: 20
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6.0.3
         with:
           submodules: false
 
@@ -794,7 +794,7 @@ jobs:
             command: ./gradlew --no-daemon :app:assembleThirdPartyDebug
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6.0.3
         with:
           submodules: false
 

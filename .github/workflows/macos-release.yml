@@ -40,7 +40,7 @@ jobs:
           fi
 
       - name: Checkout selected tag
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6.0.3
         with:
           ref: refs/tags/${{ inputs.tag }}
           fetch-depth: 0
@@ -130,7 +130,7 @@ jobs:
           fi
 
       - name: Checkout selected tag
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6.0.3
         with:
           ref: refs/tags/${{ inputs.tag }}
           fetch-depth: 0
@@ -248,7 +248,7 @@ jobs:
 
       - name: Checkout main branch for appcast seed
         if: ${{ steps.release_channel.outputs.is_beta != 'true' }}
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6.0.3
         with:
           path: openclaw-main
           ref: main
